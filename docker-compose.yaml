@@ -1,9 +1,9 @@
 version: "3"
 
 services:
-  task_manager_api:
-    image: task_manager_api
-    container_name: task_manager_api
+  list_ease_api:
+    image: list_ease_api
+    container_name: list_ease_api
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -14,10 +14,29 @@ services:
     env_file:
       - ./.env
     depends_on:
-      - task_manager_db
+      - list_ease_db
     networks:
-      - task_manager_network
+      - list_ease_network
+
+  list_ease_db:
+    image: postgres:13
+    container_name: list_ease_db
+    restart: always
+    ports:
+      - "5432:5432"
+    env_file:
+    - ./.env
+    #environment:
+    #  POSTGRES_USER: admin
+    #  POSTGRES_PASSWORD: admin
+    #  POSTGRES_NAME: list_ease
+    #  POSTGRES_HOST: list_ease_db
+    #  POSTGRES_PORT: 5432
+    volumes:
+      - ./postgresql-data:/var/lib/postgresql/data
+    networks:
+    - list_ease_network
 
 networks:
-  task_manager_network:
+  list_ease_network:
     driver: bridge
