@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  task_manager_api:
+    image: task_manager_api
+    container_name: task_manager_api
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    expose:
+      - 3333
+    ports:
+      - "3333:3333"
+    env_file:
+      - ./.env
+    depends_on:
+      - task_manager_db
+    networks:
+      - task_manager_network
+
+networks:
+  task_manager_network:
+    driver: bridge

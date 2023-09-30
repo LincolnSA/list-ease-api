@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String   @id @default(uuid())
+  name       String
+  email      String   @unique
+  password   String
+  created_at DateTime @default(now())
+  item       Item[]
+
+  @@map("users")
+}
+
+enum Category {
+  Padaria
+  Legume
+  Carne
+  Fruta
+  Bebida
+}
+
+enum AmountType {
+  und
+  l
+  kg
+}
+
+model Item {
+  id          String     @id @default(uuid())
+  name        String
+  amount      String
+  amount_type AmountType @default(und)
+  category    Category   @default(Padaria)
+  checked     Boolean    @default(false)
+  created_at  DateTime   @default(now())
+  user_id     String     @default(uuid())
+  user        User       @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("items")
+}
